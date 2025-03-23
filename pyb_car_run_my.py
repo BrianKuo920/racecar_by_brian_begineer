@@ -45,11 +45,11 @@ for i in range(num_joints):
     
 
 # set the control parameter of car
-max_velocity = 30 # speed of car
+max_velocity = 10 # speed of car
 max_force = 10 # torque
 steering_angle = 0.5 # the max angular of steering
 
-# define the control function of the car  ( similar to the input of the control system )
+# define the control function of the car  
 def racecar_control() :
     
     # system input
@@ -71,18 +71,23 @@ def racecar_control() :
     if p.B3G_LEFT_ARROW in key :
         steering = -steering_angle # turn left ( the angle is negetive )
     elif p.B3G_RIGHT_ARROW in key :
-        steering = steering_angle # turn right
+        steering = steering_angle # turn right 
     else : 
         steering = 0 
     
     # system output
     for wheel in wheel_joints : 
         p.setJointMotorControl2 ( racecar , wheel , p.VELOCITY_CONTROL , targetVelocity = throttle  , force=max_force )
-    for steer in steering_joints :
+    for steer in steering_joints : 
         p.setJointMotorControl2 ( racecar , steer , p.POSITION_CONTROL , targetPosition = steering )
 
 
 while True:
    racecar_control()
-   p.stepSimulation()
+
+   p.stepSimulation() 
+   # If you execude this command , pybullet will calculate all the physical state once in this enviroment .
+   # Therefore , if you wants to let your car move continuously , you must keep doing this command .
+
    time.sleep(1./240.)
+   # This code runs the simulation at 240 Hz so that the animation doesn't happen too fast.
